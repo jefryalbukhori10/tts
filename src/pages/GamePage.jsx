@@ -769,7 +769,8 @@ import { collection, getDocs, doc, updateDoc, query } from "firebase/firestore";
 import { db } from "../firebase";
 import Header from "../components/Header";
 import Swal from "sweetalert2";
-import { FiDollarSign, FiZap, FiVideo } from "react-icons/fi";
+import { FiDollarSign, FiZap, FiVideo, FiShoppingCart } from "react-icons/fi";
+import Loading from "../components/Loading";
 
 export default function GamePage({ user, setUser }) {
   const { cid, lid } = useParams();
@@ -956,7 +957,7 @@ export default function GamePage({ user, setUser }) {
     }
   }
 
-  if (loading) return <div className="p-6 text-white">Memuat...</div>;
+  if (loading) return <Loading />;
   if (!questions.length)
     return <div className="p-6 text-white">Tidak ada soal.</div>;
 
@@ -966,10 +967,10 @@ export default function GamePage({ user, setUser }) {
   );
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-indigo-950 via-purple-950 to-pink-950 overflow-hidden p-4">
+    <div className="relative min-h-screen bg-gradient-to-br from-indigo-950 via-purple-950 to-pink-950 overflow-hidden ">
       <Header user={user} onOpenAccount={() => navigate("/account")} />
 
-      <main className="max-w-3xl mx-auto mt-6 space-y-6">
+      <main className="max-w-3xl mx-auto mt-6 p-4 space-y-6">
         <div className="bg-gray-900/60 backdrop-blur-sm p-4 rounded-2xl shadow-2xl border border-purple-500/40">
           <div className="flex flex-col md:flex-row gap-4 items-center">
             <div className="w-28 flex-shrink-0">
@@ -998,24 +999,25 @@ export default function GamePage({ user, setUser }) {
                   </div>
                 ))}
               </div>
-              <div className="mt-4 flex flex-wrap gap-2">
+              <div className="mt-4 flex flex-wrap justify-center gap-2">
                 <button
                   onClick={useHintFree}
                   className="flex items-center gap-1 px-3 py-1 bg-blue-500/90 hover:bg-blue-400 rounded-xl text-white font-semibold shadow-lg transition-transform transform hover:scale-105"
                 >
                   <FiVideo /> Hint Gratis
                 </button>
-                <button
-                  onClick={() => setShowStore(true)}
-                  className="flex items-center gap-1 px-3 py-1 bg-yellow-500/90 hover:bg-yellow-400 rounded-xl text-white font-semibold shadow-lg transition-transform transform hover:scale-105"
-                >
-                  <FiDollarSign /> Toko Coin
-                </button>
+
                 <button
                   onClick={useHintPaid}
                   className="flex items-center gap-1 px-3 py-1 bg-green-600/90 hover:bg-green-500 rounded-xl text-white font-semibold shadow-lg transition-transform transform hover:scale-105"
                 >
-                  <FiZap /> Hint (15 Koin)
+                  <FiZap /> Hint (-15 Koin)
+                </button>
+                <button
+                  onClick={() => setShowStore(true)}
+                  className="flex items-center gap-1 px-3 py-1 bg-yellow-500/90 hover:bg-yellow-400 rounded-xl text-white font-semibold shadow-lg transition-transform transform hover:scale-105"
+                >
+                  <FiShoppingCart /> Toko Coin
                 </button>
               </div>
             </div>
