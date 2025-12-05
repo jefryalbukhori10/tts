@@ -14,6 +14,8 @@ import LevelDetailAdmin from "./pages/LevelDetailAdmin";
 import DaftarSoalPage from "./pages/DaftarSoalPage";
 import DaftarUserPage from "./pages/DaftarUserPage";
 import ManageAdminPage from "./pages/ManageAdminPage";
+import AdminRoute from "./AdminRoute";
+import { adminRoutes } from "./adminRoutes";
 
 /**
  * App: central routing + pass user hooks to pages
@@ -49,7 +51,7 @@ export default function App() {
       />
       {/* Admin */}
       <Route path="/admin" element={<AdminLogin />} />
-      <Route path="/admin/panel" element={<AdminPanel />} />
+      {/* <Route path="/admin/panel" element={<AdminPanel />} />
       <Route path="/admin/category/:catId" element={<CategoryDetailAdmin />} />
       <Route
         path="/admin/category/:catId/level/:levelId"
@@ -63,8 +65,15 @@ export default function App() {
         path="/admin/category/:catId/level/:levelId/users"
         element={<DaftarUserPage />}
       />
-      <Route path="/admin/manage-admin" element={<ManageAdminPage />} />
-
+      <Route path="/admin/manage-admin" element={<ManageAdminPage />} /> */}
+      {/* Looping semua route admin */}
+      {adminRoutes.map(({ path, element }) => (
+        <Route
+          key={path}
+          path={path}
+          element={<AdminRoute>{element}</AdminRoute>}
+        />
+      ))}
       <Route
         path="*"
         element={<div style={{ padding: 24 }}>Halaman tidak ditemukan</div>}

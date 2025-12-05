@@ -161,7 +161,7 @@ export default function AdminPanel() {
         <Loading />
       </>
     );
-  console.log(admin);
+  // console.log(admin);
 
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
