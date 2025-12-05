@@ -147,3 +147,15 @@ button {
 .neon-text {
   text-shadow: 0 0 8px #00eaff, 0 0 12px #00eaff;
 }
+
+/* Tailwind + CSS spinner */
+.loader {
+  border-top-color: #6366f1; /* warna neon */
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
