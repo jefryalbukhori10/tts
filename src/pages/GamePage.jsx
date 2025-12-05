@@ -784,6 +784,21 @@ export default function GamePage({ user, setUser }) {
   const [showStore, setShowStore] = useState(false);
   const [sdkReady, setSdkReady] = useState(false);
   const [showAdModal, setShowAdModal] = useState(false);
+  // Array gambar karakter
+  const characterImages = [
+    "/character.png",
+    "/character1.png",
+    "/character2.png",
+  ];
+
+  // State untuk gambar random
+  const [randomImage, setRandomImage] = useState(characterImages[0]);
+
+  useEffect(() => {
+    // Pilih gambar random saat komponen mount
+    const randomIndex = Math.floor(Math.random() * characterImages.length);
+    setRandomImage(characterImages[randomIndex]);
+  }, [questions, currentIdx]); // Bisa juga [q.question] jika ingin ganti tiap soal baru
 
   // Load questions
   useEffect(() => {
@@ -975,7 +990,7 @@ export default function GamePage({ user, setUser }) {
           <div className="flex flex-col md:flex-row gap-4 items-center">
             <div className="w-28 flex-shrink-0">
               <img
-                src="/character.png"
+                src={randomImage}
                 alt="Karakter"
                 className="w-full h-auto rounded-xl shadow-lg"
               />
