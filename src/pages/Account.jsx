@@ -21,6 +21,9 @@ export default function Account({ user, createUser, loginWithCode, setUser }) {
       }
       const catIds = Object.keys(user.progress);
       const data = {};
+      if (catIds.length <= 0) {
+        setLoading(false);
+      }
       for (const id of catIds) {
         try {
           const snap = await getDoc(doc(db, "categories", id));
