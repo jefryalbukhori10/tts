@@ -1046,7 +1046,7 @@ export default function GamePage({ user, setUser }) {
             }}
             className="flex items-center gap-2 px-3 py-1 bg-white/20 text-white hover:bg-white/30 font-semibold rounded-xl shadow-md transition-transform transform hover:scale-105"
           >
-            ← Kembali
+            <FiArrowLeft />
           </button>
 
           <span className="text-white font-bold text-lg md:text-xl drop-shadow-lg">

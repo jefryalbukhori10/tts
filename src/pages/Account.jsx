@@ -1,13 +1,44 @@
 // src/pages/Account.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import Header from "../components/Header";
 import { FiLogOut, FiUser, FiKey } from "react-icons/fi";
+import Loading from "../components/Loading";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
 export default function Account({ user, createUser, loginWithCode, setUser }) {
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
+  const [categoriesData, setCategoriesData] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadCategories() {
+      if (!user?.progress) return;
+      const catIds = Object.keys(user.progress);
+      const data = {};
+      for (const id of catIds) {
+        try {
+          const snap = await getDoc(doc(db, "categories", id));
+          if (snap.exists()) {
+            data[id] = snap.data().name;
+          } else {
+            data[id] = id; // fallback
+          }
+        } catch (err) {
+          console.warn("Gagal load kategori:", err);
+          data[id] = id; // fallback
+        } finally {
+          setLoading(false);
+        }
+      }
+      setCategoriesData(data);
+    }
+    loadCategories();
+  }, [user]);
+
   const navigate = useNavigate();
 
   async function onCreate(e) {
@@ -84,10 +115,12 @@ export default function Account({ user, createUser, loginWithCode, setUser }) {
     });
   }
 
-  const categories = user?.progress ? Object.keys(user.progress) : [];
+  if (loading) return <Loading />;
 
+  const categories = user?.progress ? Object.keys(user.progress) : [];
+  console.log(categories);
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-indigo-950 via-purple-950 to-pink-950 p-4">
+    <div className="relative min-h-screen bg-gradient-to-br from-indigo-950 via-purple-950 to-pink-950">
       {/* Floating particles */}
       {[...Array(30)].map((_, i) => (
         <div
@@ -103,7 +136,7 @@ export default function Account({ user, createUser, loginWithCode, setUser }) {
 
       <Header user={user} onOpenAccount={() => {}} />
 
-      <main className="max-w-2xl mx-auto mt-6 space-y-6">
+      <main className="max-w-2xl mx-auto mt-6 p-4 space-y-6">
         {user ? (
           <>
             <h2 className="text-2xl font-bold text-white drop-shadow-lg">
@@ -138,9 +171,14 @@ export default function Account({ user, createUser, loginWithCode, setUser }) {
               )}
               {categories.map((catId) => (
                 <div key={catId} className="mb-1">
-                  <p className="font-medium text-white">Kategori: {catId}</p>
+                  <p className="font-medium text-white">
+                    Kategori: {categoriesData[catId] || catId}
+                  </p>
                   <p className="text-sm text-gray-300">
-                    Level dibuka: {user.progress[catId].length}
+                    Level Diseleisaikan: {user.progress[catId].length}
+                  </p>
+                  <p className="text-sm text-gray-300">
+                    Level Terbuka: {user.progress[catId].length + 1}
                   </p>
                 </div>
               ))}
