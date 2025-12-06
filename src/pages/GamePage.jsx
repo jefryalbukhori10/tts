@@ -1017,6 +1017,57 @@ export default function GamePage({ user, setUser }) {
     r.split("")
   );
 
+  function KeyboardKey({ letter, onPress, isBackspace }) {
+    const [ripples, setRipples] = useState([]);
+
+    const handleClick = (e) => {
+      const rect = e.target.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const newRipple = { x, y, key: Date.now() };
+      setRipples((prev) => [...prev, newRipple]);
+
+      onPress(letter);
+
+      // Hapus ripple setelah animasi selesai
+      setTimeout(() => {
+        setRipples((prev) => prev.filter((r) => r.key !== newRipple.key));
+      }, 600); // durasi animasi
+    };
+
+    return (
+      <button
+        onClick={handleClick}
+        className={`
+        relative overflow-hidden
+        ${
+          isBackspace
+            ? "w-10 h-7 md:w-24 md:h-12 bg-red-600 hover:bg-red-500"
+            : "w-7 h-7 md:w-12 md:h-12 bg-purple-700/70 hover:bg-purple-600"
+        }
+        text-white font-bold rounded-md shadow-lg
+        transition-transform transform hover:scale-110
+      `}
+      >
+        {letter}
+        {ripples.map((r) => (
+          <span
+            key={r.key}
+            className="absolute rounded-full bg-white/50 animate-ripple"
+            style={{
+              left: r.x,
+              top: r.y,
+              width: 0,
+              height: 0,
+              transform: "translate(-50%, -50%)",
+            }}
+          ></span>
+        ))}
+      </button>
+    );
+  }
+
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-indigo-950 via-purple-950 to-pink-950 overflow-hidden ">
       <Header user={user} onOpenAccount={() => navigate("/account")} />
@@ -1119,21 +1170,10 @@ export default function GamePage({ user, setUser }) {
           {keyboardRows.map((row, ri) => (
             <div key={ri} className="flex justify-center gap-1 mb-2 flex-wrap">
               {row.map((key) => (
-                <button
-                  key={key}
-                  onClick={() => onKeyPress(key)}
-                  className="w-7 h-7 md:w-12 md:h-12 bg-purple-700/70 hover:bg-purple-600 text-white font-bold rounded-md shadow-lg transition-transform transform hover:scale-110"
-                >
-                  {key}
-                </button>
+                <KeyboardKey key={key} letter={key} onPress={onKeyPress} />
               ))}
               {ri === keyboardRows.length - 1 && (
-                <button
-                  onClick={onBackspace}
-                  className="w-10 h-7 md:w-24 md:h-12 bg-red-600 hover:bg-red-500 text-white font-bold rounded-md shadow-lg transition-transform transform hover:scale-110"
-                >
-                  ⌫
-                </button>
+                <KeyboardKey letter="⌫" isBackspace onPress={onBackspace} />
               )}
             </div>
           ))}
