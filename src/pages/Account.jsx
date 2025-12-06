@@ -16,7 +16,9 @@ export default function Account({ user, createUser, loginWithCode, setUser }) {
 
   useEffect(() => {
     async function loadCategories() {
-      if (!user?.progress) return;
+      if (!user) {
+        setLoading(false);
+      }
       const catIds = Object.keys(user.progress);
       const data = {};
       for (const id of catIds) {

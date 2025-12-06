@@ -824,6 +824,7 @@ export default function GamePage({ user, setUser }) {
     // "/character1.png",
     // "/character2.png",
     "/media1.mp4",
+    "/media2.mp4",
   ];
 
   // State untuk gambar random
@@ -1063,6 +1064,7 @@ export default function GamePage({ user, setUser }) {
             <div className="w-28 flex-shrink-0">
               <video
                 autoPlay
+                loop
                 src={randomImage}
                 alt="Karakter"
                 className="w-full h-auto rounded-xl shadow-lg"
