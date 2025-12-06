@@ -33,18 +33,15 @@ export default function CategoryCard({ cat, userProgress }) {
 
       {/* Category Content */}
       <h3 className="font-bold text-xl text-white">{cat.name}</h3>
-      <p className="text-sm text-white/80 mt-1">{cat.description}</p>
 
+      <span className="text-sm text-white/70">
+        Admin: {admin ? admin.name || admin.email : "Memuat..."}
+      </span>
       <div className="mt-4 flex items-center justify-between">
-        <span className="text-sm text-white/70">
-          Admin: {admin ? admin.name || admin.email : "Memuat..."}
+        <span className="text-sm text-white/90">
+          {unlockedCount + 1} unlocked
         </span>
-
         <div className="flex items-center gap-2">
-          <span className="text-sm text-white/90">
-            {unlockedCount} unlocked
-          </span>
-
           <button
             onClick={() => navigate(`/category/${cat.id}`)}
             className="px-4 py-1 bg-gradient-to-r from-purple-500 to-cyan-400 

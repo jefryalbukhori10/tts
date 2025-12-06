@@ -765,11 +765,24 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { collection, getDocs, doc, updateDoc, query } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  doc,
+  updateDoc,
+  query,
+  getDoc,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import Header from "../components/Header";
 import Swal from "sweetalert2";
-import { FiDollarSign, FiZap, FiVideo, FiShoppingCart } from "react-icons/fi";
+import {
+  FiDollarSign,
+  FiZap,
+  FiVideo,
+  FiShoppingCart,
+  FiArrowLeft,
+} from "react-icons/fi";
 import Loading from "../components/Loading";
 
 export default function GamePage({ user, setUser }) {
@@ -784,6 +797,27 @@ export default function GamePage({ user, setUser }) {
   const [showStore, setShowStore] = useState(false);
   const [sdkReady, setSdkReady] = useState(false);
   const [showAdModal, setShowAdModal] = useState(false);
+
+  const [levelInfo, setLevelInfo] = useState(null);
+
+  useEffect(() => {
+    async function loadLevelInfo() {
+      try {
+        const docRef = doc(db, "categories", cid, "levels", lid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setLevelInfo({ id: docSnap.id, ...docSnap.data() });
+        } else {
+          setLevelInfo({ id: lid, title: "Tidak ditemukan" });
+        }
+      } catch (e) {
+        console.error(e);
+        setLevelInfo({ id: lid, title: "Error" });
+      }
+    }
+    loadLevelInfo();
+  }, [cid, lid]);
+
   // Array gambar karakter
   const characterImages = [
     "/character.png",
@@ -985,7 +1019,44 @@ export default function GamePage({ user, setUser }) {
     <div className="relative min-h-screen bg-gradient-to-br from-indigo-950 via-purple-950 to-pink-950 overflow-hidden ">
       <Header user={user} onOpenAccount={() => navigate("/account")} />
 
-      <main className="max-w-3xl mx-auto mt-6 p-4 space-y-6">
+      <main className="max-w-3xl mx-auto  p-4 space-y-6">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => {
+              Swal.fire({
+                title: "Yakin ingin keluar?",
+                text: "Jika keluar, permainan akan dimulai dari awal.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Ya",
+                cancelButtonText: "Batal",
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  setCurrentIdx(0);
+                  if (questions.length > 0) {
+                    const ans = (questions[0].answer || "")
+                      .toUpperCase()
+                      .replace(/\s+/g, "");
+                    setSlots(Array(ans.length).fill(""));
+                    setRevealed(Array(ans.length).fill(false));
+                  }
+                  navigate(`/category/${cid}`);
+                }
+              });
+            }}
+            className="flex items-center gap-2 px-3 py-1 bg-white/20 text-white hover:bg-white/30 font-semibold rounded-xl shadow-md transition-transform transform hover:scale-105"
+          >
+            ← Kembali
+          </button>
+
+          <span className="text-white font-bold text-lg md:text-xl drop-shadow-lg">
+            {"Level " + levelInfo?.levelNumber || "Tidak ada judul"}
+          </span>
+          <span className="text-white/80 font-semibold">
+            Soal {currentIdx + 1} / {questions.length}
+          </span>
+        </div>
+
         <div className="bg-gray-900/60 backdrop-blur-sm p-4 rounded-2xl shadow-2xl border border-purple-500/40">
           <div className="flex flex-col md:flex-row gap-4 items-center">
             <div className="w-28 flex-shrink-0">

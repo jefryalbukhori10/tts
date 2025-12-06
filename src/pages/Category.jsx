@@ -5,6 +5,7 @@ import { db } from "../firebase";
 import Header from "../components/Header";
 import Swal from "sweetalert2";
 import Loading from "../components/Loading";
+import { FiArrowLeft } from "react-icons/fi";
 
 export default function Category({ user, setUser }) {
   const { cid } = useParams();
@@ -33,9 +34,24 @@ export default function Category({ user, setUser }) {
           collection(db, "categories", cid, "levels")
         );
 
-        const arr = levelsSnap.docs
-          .map((d) => ({ id: d.id, ...d.data() }))
-          .sort((a, b) => a.levelNumber - b.levelNumber);
+        // const arr = levelsSnap.docs
+        //   .map((d) => ({ id: d.id, ...d.data() }))
+        //   .sort((a, b) => a.levelNumber - b.levelNumber);
+        const arr = await Promise.all(
+          levelsSnap.docs
+            .map(async (d) => {
+              const levelData = { id: d.id, ...d.data() };
+
+              // Ambil jumlah soal tiap level
+              const questionsSnap = await getDocs(
+                collection(db, "categories", cid, "levels", d.id, "questions")
+              );
+              levelData.questionCount = questionsSnap.size; // jumlah soal
+
+              return levelData;
+            })
+            .sort((a, b) => a.levelNumber - b.levelNumber)
+        );
 
         setLevels(arr);
       } catch (e) {
@@ -83,7 +99,6 @@ export default function Category({ user, setUser }) {
 
     navigate(`/category/${cid}/level/${level.id}`);
   }
-
   // ---------------------------
   // RENDER
   // ---------------------------
@@ -105,10 +120,20 @@ export default function Category({ user, setUser }) {
       <Header user={user} onOpenAccount={() => navigate("/account")} />
 
       <main className="max-w-3xl mx-auto p-4">
-        <h2 className="text-3xl font-extrabold text-white drop-shadow-xl mb-2 animate-textGlow">
-          {category?.title}
-        </h2>
-        <p className="text-white/80 mb-6">{category?.description}</p>
+        {/* Title & Back Button */}
+        <div className="flex items-center gap-4 justify-between mb-6">
+          <button
+            onClick={() => navigate("/menu")}
+            className="px-3 py-1 rounded-md bg-white/20 text-white hover:bg-white/30 font-semibold"
+          >
+            <FiArrowLeft />
+          </button>
+          <h2 className="text-xl font-extrabold text-white drop-shadow-xl animate-textGlow">
+            {category?.name}
+          </h2>
+          {/* Spacer agar title tetap di tengah */}
+          <div className="w-16" />
+        </div>
 
         <div className="grid grid-cols-2 gap-6">
           {levels.map((lv, idx) => {
@@ -140,10 +165,10 @@ export default function Category({ user, setUser }) {
                 {/* Level Info */}
                 <div>
                   <div className="text-white font-bold text-lg">
-                    Level {lv.levelNumber}: {lv.title || lv.id}
+                    Level {lv.levelNumber}
                   </div>
                   <div className="text-white/70 text-xs">
-                    LevelNumber: {lv.levelNumber}
+                    Jumlah Soal: {lv.questionCount || 0}
                   </div>
                 </div>
 
