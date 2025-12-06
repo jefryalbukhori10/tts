@@ -820,9 +820,10 @@ export default function GamePage({ user, setUser }) {
 
   // Array gambar karakter
   const characterImages = [
-    "/character.png",
-    "/character1.png",
-    "/character2.png",
+    // "/character.png",
+    // "/character1.png",
+    // "/character2.png",
+    "/media1.mp4",
   ];
 
   // State untuk gambar random
@@ -1060,7 +1061,8 @@ export default function GamePage({ user, setUser }) {
         <div className="bg-gray-900/60 backdrop-blur-sm p-4 rounded-2xl shadow-2xl border border-purple-500/40">
           <div className="flex flex-col md:flex-row gap-4 items-center">
             <div className="w-28 flex-shrink-0">
-              <img
+              <video
+                autoPlay
                 src={randomImage}
                 alt="Karakter"
                 className="w-full h-auto rounded-xl shadow-lg"
