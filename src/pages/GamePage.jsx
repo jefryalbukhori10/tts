@@ -820,11 +820,13 @@ export default function GamePage({ user, setUser }) {
 
   // Array gambar karakter
   const characterImages = [
-    // "/character.png",
-    // "/character1.png",
-    // "/character2.png",
-    "/media1.mp4",
-    "/media2.mp4",
+    "/character.png",
+    "/character1.png",
+    "/character2.png",
+    "/character3.png",
+    "/character4.png",
+    "/character5.png",
+    "/character6.png",
   ];
 
   // State untuk gambar random
@@ -1043,8 +1045,8 @@ export default function GamePage({ user, setUser }) {
         relative overflow-hidden
         ${
           isBackspace
-            ? "w-10 h-7 md:w-24 md:h-12 bg-red-600 hover:bg-red-500"
-            : "w-7 h-7 md:w-12 md:h-12 bg-purple-700/70 hover:bg-purple-600"
+            ? "w-10 h-10 md:w-24 md:h-12 bg-red-600 hover:bg-red-500"
+            : "w-7 h-10 md:w-12 md:h-12 bg-purple-700/70 hover:bg-purple-600"
         }
         text-white font-bold rounded-md shadow-lg
         transition-transform transform hover:scale-110
@@ -1113,9 +1115,7 @@ export default function GamePage({ user, setUser }) {
         <div className="bg-gray-900/60 backdrop-blur-sm p-4 rounded-2xl shadow-2xl border border-purple-500/40">
           <div className="flex flex-col md:flex-row gap-4 items-center">
             <div className="w-28 flex-shrink-0">
-              <video
-                autoPlay
-                loop
+              <img
                 src={randomImage}
                 alt="Karakter"
                 className="w-full h-auto rounded-xl shadow-lg"
