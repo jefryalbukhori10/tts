@@ -1015,7 +1015,7 @@ export default function GamePage({ user, setUser }) {
     return <div className="p-6 text-white">Tidak ada soal.</div>;
 
   const q = questions[currentIdx];
-  const keyboardRows = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"].map((r) =>
+  const keyboardRows = ["AGQBMLE", "RZYKCHM", "DXVJWFT", "SNOPI"].map((r) =>
     r.split("")
   );
 
@@ -1045,8 +1045,8 @@ export default function GamePage({ user, setUser }) {
         relative overflow-hidden
         ${
           isBackspace
-            ? "w-10 h-10 md:w-24 md:h-12 bg-red-600 hover:bg-red-500"
-            : "w-7 h-10 md:w-12 md:h-12 bg-purple-700/70 hover:bg-purple-600"
+            ? "w-20 h-10 md:w-24 md:h-12 bg-red-600 hover:bg-red-500"
+            : "w-10 h-10 md:w-12 md:h-12 bg-purple-700/70 hover:bg-purple-600"
         }
         text-white font-bold rounded-md shadow-lg
         transition-transform transform hover:scale-110
