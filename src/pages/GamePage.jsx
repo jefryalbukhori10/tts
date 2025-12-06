@@ -1122,7 +1122,7 @@ export default function GamePage({ user, setUser }) {
               />
             </div>
             <div className="flex-1">
-              <h3 className="text-xl md:text-2xl font-bold text-white drop-shadow-lg">
+              <h3 className="text-2xl md:text-2xl font-bold uppercase text-white drop-shadow-lg">
                 {q.question}
               </h3>
               <div className="mt-4 flex flex-wrap gap-2">

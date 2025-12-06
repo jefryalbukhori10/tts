@@ -39,7 +39,7 @@ export default function CategoryCard({ cat, userProgress }) {
       </span>
       <div className="mt-4 flex items-center justify-between">
         <span className="text-sm text-white/90">
-          {unlockedCount + 1} unlocked
+          {unlockedCount + 1} Level Terbuka
         </span>
         <div className="flex items-center gap-2">
           <button
