@@ -1115,14 +1115,14 @@ export default function GamePage({ user, setUser }) {
         </div>
 
         {/* Keyboard */}
-        <div className="bg-gray-900/50 backdrop-blur-sm p-3 rounded-2xl shadow-inner border border-purple-500/30">
+        <div className="bg-gray-900/50 backdrop-blur-sm py-3 rounded-2xl shadow-inner border border-purple-500/30">
           {keyboardRows.map((row, ri) => (
-            <div key={ri} className="flex justify-center gap-2 mb-2 flex-wrap">
+            <div key={ri} className="flex justify-center gap-1 mb-2 flex-wrap">
               {row.map((key) => (
                 <button
                   key={key}
                   onClick={() => onKeyPress(key)}
-                  className="w-10 h-10 md:w-12 md:h-12 bg-purple-700/70 hover:bg-purple-600 text-white font-bold rounded-md shadow-lg transition-transform transform hover:scale-110"
+                  className="w-7 h-7 md:w-12 md:h-12 bg-purple-700/70 hover:bg-purple-600 text-white font-bold rounded-md shadow-lg transition-transform transform hover:scale-110"
                 >
                   {key}
                 </button>
@@ -1130,7 +1130,7 @@ export default function GamePage({ user, setUser }) {
               {ri === keyboardRows.length - 1 && (
                 <button
                   onClick={onBackspace}
-                  className="w-20 h-10 md:w-24 md:h-12 bg-red-600 hover:bg-red-500 text-white font-bold rounded-md shadow-lg transition-transform transform hover:scale-110"
+                  className="w-10 h-7 md:w-24 md:h-12 bg-red-600 hover:bg-red-500 text-white font-bold rounded-md shadow-lg transition-transform transform hover:scale-110"
                 >
                   ⌫
                 </button>
