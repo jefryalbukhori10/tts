@@ -302,6 +302,7 @@ import {
   deleteDoc,
   updateDoc,
   doc,
+  getDoc,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { useNavigate, useParams } from "react-router-dom";
@@ -336,6 +337,9 @@ export default function DaftarSoalPage() {
   const [inputAnswer, setInputAnswer] = useState("");
   const [uploading, setUploading] = useState(false);
 
+  const [categoryName, setCategoryName] = useState("");
+  const [levelNumber, setLevelNumber] = useState(null);
+
   const [showImportModal, setShowImportModal] = useState(false);
 
   const openImportModal = () => setShowImportModal(true);
@@ -345,6 +349,24 @@ export default function DaftarSoalPage() {
   useEffect(() => {
     const load = async () => {
       try {
+        // Ambil kategori
+        const catSnap = await getDoc(doc(db, "categories", catId));
+        if (catSnap.exists()) {
+          setCategoryName(catSnap.data().name);
+        }
+
+        // Ambil data level
+        const lvlSnap = await getDoc(
+          doc(db, "categories", catId, "levels", levelId)
+        );
+
+        if (lvlSnap.exists()) {
+          const lvlData = lvlSnap.data();
+
+          // simpan levelNumber
+          setLevelNumber(lvlData.levelNumber || null);
+        }
+
         const qSnap = await getDocs(
           collection(db, "categories", catId, "levels", levelId, "questions")
         );
@@ -363,7 +385,7 @@ export default function DaftarSoalPage() {
       }
     };
     load();
-  }, [catId, levelId]);
+  }, [catId, levelId, categoryName, levelNumber]);
 
   // ===== Modal tambah / edit =====
   const openAddModal = () => {
@@ -588,7 +610,8 @@ export default function DaftarSoalPage() {
           >
             <FiArrowLeft size={22} />
           </button>
-          Daftar Soal — Level {levelId}
+          Daftar Soal — Level {levelNumber ?? "?"} |{" "}
+          {categoryName || "Memuat..."}
         </h2>
 
         {/* Tambah & Upload & Template */}

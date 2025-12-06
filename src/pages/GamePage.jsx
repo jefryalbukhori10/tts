@@ -995,15 +995,16 @@ export default function GamePage({ user, setUser }) {
     const catProgress = progress[cid] || [];
     if (!catProgress.includes(lid)) catProgress.push(lid);
     progress[cid] = catProgress;
-    setUser({ ...user, progress });
-    try {
-      await updateDoc(userRef, { progress });
-    } catch (e) {
-      console.warn("Gagal update progress:", e.message);
-    }
+
     if (currentIdx < questions.length - 1) {
       setCurrentIdx(currentIdx + 1);
     } else {
+      try {
+        await updateDoc(userRef, { progress });
+      } catch (e) {
+        console.warn("Gagal update progress:", e.message);
+      }
+      setUser({ ...user, progress });
       Swal.fire("Level Selesai!", "Level ini telah selesai.", "success").then(
         () => navigate(`/category/${cid}`)
       );
@@ -1015,7 +1016,7 @@ export default function GamePage({ user, setUser }) {
     return <div className="p-6 text-white">Tidak ada soal.</div>;
 
   const q = questions[currentIdx];
-  const keyboardRows = ["AGQBMLE", "RZYKCHM", "DXVJWFT", "SNOPI"].map((r) =>
+  const keyboardRows = ["AGQBMLE", "RZYKCHU", "DXVJWFT", "SNOPI"].map((r) =>
     r.split("")
   );
 

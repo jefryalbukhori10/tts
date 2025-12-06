@@ -1,7 +1,13 @@
 // src/pages/admin/DaftarUserPage.jsx
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  deleteDoc,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import HeaderAdmin from "../components/HeaderAdmin";
 import Loading from "../components/Loading";
@@ -10,13 +16,36 @@ import { FiArrowLeft, FiTrash2 } from "react-icons/fi";
 
 export default function DaftarUserPage() {
   const { levelId } = useParams(); // catId tidak perlu kalau data user di collection users
+  const { catId } = useParams(); // catId tidak perlu kalau data user di collection userscat
   const navigate = useNavigate();
 
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const [categoryName, setCategoryName] = useState("");
+  const [levelNumber, setLevelNumber] = useState(null);
+
   useEffect(() => {
     const loadUsers = async () => {
       try {
+        // Ambil kategori
+        const catSnap = await getDoc(doc(db, "categories", catId));
+        if (catSnap.exists()) {
+          setCategoryName(catSnap.data().name);
+        }
+
+        // Ambil data level
+        const lvlSnap = await getDoc(
+          doc(db, "categories", catId, "levels", levelId)
+        );
+
+        if (lvlSnap.exists()) {
+          const lvlData = lvlSnap.data();
+
+          // simpan levelNumber
+          setLevelNumber(lvlData.levelNumber || null);
+        }
+
         const snap = await getDocs(collection(db, "users"));
         const arr = [];
 
@@ -53,7 +82,7 @@ export default function DaftarUserPage() {
     };
 
     loadUsers();
-  }, [levelId]);
+  }, [levelId, categoryName, levelNumber, catId]);
 
   if (loading) return <Loading />;
 
@@ -91,7 +120,8 @@ export default function DaftarUserPage() {
           </button>
 
           <h2 className="text-lg font-extrabold tracking-wide neon-text">
-            Daftar User — Level {levelId}
+            Daftar Soal — Level {levelNumber ?? "?"} |{" "}
+            {categoryName || "Memuat..."}
           </h2>
         </div>
 

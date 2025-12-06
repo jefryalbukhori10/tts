@@ -74,11 +74,9 @@ export default function LevelDetailAdmin() {
           const data = d.data();
           const progress = data.progress || {};
 
-          for (let key in progress) {
-            if (progress[key].includes(levelId)) {
-              count++;
-              break; // cukup satu key yang match
-            }
+          // Cek kalau kategori ini ada di progress user
+          if (progress[catId] && progress[catId].includes(levelId)) {
+            count++;
           }
         });
 
